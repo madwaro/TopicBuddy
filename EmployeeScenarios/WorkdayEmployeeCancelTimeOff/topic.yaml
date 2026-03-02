@@ -48,6 +48,16 @@ beginDialog:
       variable: Topic.fetchIsSuccess
       value: =false
 
+    - kind: SetVariable
+      id: init_fetch_response
+      variable: Topic.fetchResponse
+      value: =""
+
+    - kind: SetVariable
+      id: init_fetch_error_response
+      variable: Topic.fetchErrorResponse
+      value: =""
+
     - kind: BeginDialog
       id: get_time_off_requests
       displayName: Get Upcoming Time Off Requests
@@ -318,6 +328,16 @@ beginDialog:
       id: init_cancel_is_success
       variable: Topic.cancelIsSuccess
       value: =false
+
+    - kind: SetVariable
+      id: init_cancel_response
+      variable: Topic.cancelResponse
+      value: =""
+
+    - kind: SetVariable
+      id: init_cancel_error_response
+      variable: Topic.cancelErrorResponse
+      value: =""
 
     - kind: BeginDialog
       id: cancel_time_off

@@ -42,7 +42,7 @@ For each XML file in the scenario folder:
 2. Go to **Solutions → Default → New → More → Other → Employee Self-Service Template Configuration**
 3. Fill in the form:
    - **Name**: a human-readable label (e.g. `WorkdayEmployeeCancelTimeOff - Get Requests`)
-   - **Unique name**: copy the `name` attribute from `<requestTemplate name="...">` in the XML file
+   - **Unique name**: start with `msdyn_HRWorkday{serviceName}` followed by the value in the XML `name` attribute from `<requestTemplate name="...">`. You'll also find the `serviceName` in the XML file—e.g., `AbsenseManager`.
    - **Value**: paste the entire XML file contents
 4. Select **Save and close** — repeat for each XML file in the scenario
 
@@ -69,4 +69,4 @@ See [`.github/copilot-instructions.md`](.github/copilot-instructions.md) for the
 - Prefer `FactSet` over `Table` for key-value summaries
 - No Workday icon inside cards
 - Always handle API errors with `AnswerQuestionWithAI` + retry loop
-- **Always initialize variables with `SetVariable` before using them in conditions**, even if the value will be overwritten by a `BeginDialog` output — Copilot Studio requires variables to be declared before they are referenced
+- **Always initialize variables with `SetVariable` before using them in conditions**, even if the value will be overwritten by a `BeginDialog` output — Copilot Studio requires variables to be declared before they are referenced. Initialize booleans to `false` and strings to `""`.

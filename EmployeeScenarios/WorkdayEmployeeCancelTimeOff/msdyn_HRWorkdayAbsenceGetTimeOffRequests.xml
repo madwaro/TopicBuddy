@@ -1,0 +1,55 @@
+<workdayEntityConfigurationTemplate>
+    <scenario name="EmployeeGetTimeOffRequests">
+        <apiRequests>
+            <apiRequest>
+                <authType>User</authType>
+                <endpoint>
+                    <request>msdyn_HRWorkdayAbsenceGetTimeOffRequests</request>
+                    <serviceName>Absence_Management</serviceName>
+                    <version>v42.0</version>
+                </endpoint>
+                <requestParameters/>
+                <responseProperties>
+                    <property>
+                        <extractPath>//*[local-name()='Time_Off_Request_Reference']/*[local-name()='ID' and @*[local-name()='type']='WID']</extractPath>
+                        <key>RequestID</key>
+                    </property>
+                    <property>
+                        <extractPath>//*[local-name()='Time_Off_Type_Reference']/*[local-name()='ID' and @*[local-name()='type']='Time_Off_Type_ID']</extractPath>
+                        <key>TimeOffType</key>
+                    </property>
+                    <property>
+                        <extractPath>//*[local-name()='Time_Off_Request_Data']/*[local-name()='Start_Date']</extractPath>
+                        <key>StartDate</key>
+                    </property>
+                    <property>
+                        <extractPath>//*[local-name()='Time_Off_Request_Data']/*[local-name()='End_Date']</extractPath>
+                        <key>EndDate</key>
+                    </property>
+                    <property>
+                        <extractPath>//*[local-name()='Time_Off_Request_Data']/*[local-name()='Overall_Status']</extractPath>
+                        <key>Status</key>
+                    </property>
+                </responseProperties>
+            </apiRequest>
+        </apiRequests>
+    </scenario>
+    <requestTemplates>
+        <requestTemplate name="msdyn_HRWorkdayAbsenceGetTimeOffRequests">
+            <wd:Get_Time_Off_Requests_Request xmlns:wd="urn:com.workday/bsvc" wd:version="v42.0">
+                <wd:Request_Criteria>
+                    <wd:Worker_Reference>
+                        <wd:ID wd:type="Employee_ID">{Employee_ID}</wd:ID>
+                    </wd:Worker_Reference>
+                </wd:Request_Criteria>
+                <wd:Response_Filter>
+                    <wd:Page>1</wd:Page>
+                    <wd:Count>100</wd:Count>
+                </wd:Response_Filter>
+                <wd:Response_Group>
+                    <wd:Include_Time_Off_Entries>true</wd:Include_Time_Off_Entries>
+                </wd:Response_Group>
+            </wd:Get_Time_Off_Requests_Request>
+        </requestTemplate>
+    </requestTemplates>
+</workdayEntityConfigurationTemplate>

@@ -1,0 +1,40 @@
+<workdayEntityConfigurationTemplate>
+    <scenario name="EmployeeCancelTimeOff">
+        <apiRequests>
+            <apiRequest>
+                <authType>User</authType>
+                <endpoint>
+                    <request>msdyn_HRWorkdayAbsenceCancelTimeOff</request>
+                    <serviceName>Absence_Management</serviceName>
+                    <version>v42.0</version>
+                </endpoint>
+                <requestParameters/>
+                <responseProperties>
+                    <property>
+                        <extractPath>//*[local-name()='Time_Off_Request_Reference']/*[local-name()='ID' and @*[local-name()='type']='WID']</extractPath>
+                        <key>CancelledRequestID</key>
+                    </property>
+                </responseProperties>
+            </apiRequest>
+        </apiRequests>
+    </scenario>
+    <requestTemplates>
+        <requestTemplate name="msdyn_HRWorkdayAbsenceCancelTimeOff">
+            <wd:Cancel_Time_Off_Request xmlns:wd="urn:com.workday/bsvc" wd:version="v42.0">
+                <wd:Business_Process_Parameters>
+                    <wd:Auto_Complete>true</wd:Auto_Complete>
+                    <wd:Run_Now>true</wd:Run_Now>
+                    <wd:Discard_On_Exit_Validation_Error>true</wd:Discard_On_Exit_Validation_Error>
+                </wd:Business_Process_Parameters>
+                <wd:Cancel_Time_Off_Data>
+                    <wd:Worker_Reference>
+                        <wd:ID wd:type="Employee_ID">{Employee_ID}</wd:ID>
+                    </wd:Worker_Reference>
+                    <wd:Time_Off_Request_Reference>
+                        <wd:ID wd:type="WID">{Time_Off_Request_ID}</wd:ID>
+                    </wd:Time_Off_Request_Reference>
+                </wd:Cancel_Time_Off_Data>
+            </wd:Cancel_Time_Off_Request>
+        </requestTemplate>
+    </requestTemplates>
+</workdayEntityConfigurationTemplate>

@@ -275,7 +275,12 @@ beginDialog:
               type: "TextBlock",
               text: "Confirm cancellation",
               weight: "Bolder",
-              size: "Large", This action cannot be undone.",
+              size: "Large",
+              wrap: true
+            },
+            {
+              type: "TextBlock",
+              text: "This action cannot be undone.",
               wrap: true,
               spacing: "Small"
             },

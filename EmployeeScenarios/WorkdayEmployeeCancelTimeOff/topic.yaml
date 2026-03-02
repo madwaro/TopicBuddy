@@ -43,6 +43,11 @@ beginDialog:
     # The scenario calls the Workday Get_Time_Off_Requests API and
     # returns only requests with a future start date.
     # ================================================================
+    - kind: SetVariable
+      id: init_fetch_is_success
+      variable: Topic.fetchIsSuccess
+      value: =false
+
     - kind: BeginDialog
       id: get_time_off_requests
       displayName: Get Upcoming Time Off Requests
@@ -309,6 +314,11 @@ beginDialog:
     # ================================================================
     # STEP 3: Submit the cancellation to Workday
     # ================================================================
+    - kind: SetVariable
+      id: init_cancel_is_success
+      variable: Topic.cancelIsSuccess
+      value: =false
+
     - kind: BeginDialog
       id: cancel_time_off
       displayName: Cancel Time Off Request

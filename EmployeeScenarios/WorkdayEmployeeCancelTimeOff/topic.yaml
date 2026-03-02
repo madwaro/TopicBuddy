@@ -66,7 +66,7 @@ beginDialog:
           parameters: ="{""params"":[{""key"":""{Employee_ID}"",""value"":""" & Global.ESS_UserContext_Employee_Id & """}]}"
           scenarioName: msdyn_HRWorkdayAbsenceGetTimeOffRequests
 
-      dialog: msdyn_copilotforemployeeselfservicehr.topic.WorkdaySystemGetCommonExecution
+      dialog: msdyn_copilotforemployeeselfservice.topic.WorkdaySystemGetCommonExecution
       output:
         binding:
           errorResponse: Topic.fetchErrorResponse
@@ -352,7 +352,7 @@ beginDialog:
           parameters: ="{""params"":[{""key"":""{Employee_ID}"",""value"":""" & Global.ESS_UserContext_Employee_Id & """},{""key"":""{Time_Off_Request_ID}"",""value"":""" & Topic.selectedRequestID & """}]}"
           scenarioName: msdyn_HRWorkdayAbsenceCancelTimeOff
 
-      dialog: msdyn_copilotforemployeeselfservicehr.topic.WorkdaySystemGetCommonExecution
+      dialog: msdyn_copilotforemployeeselfservice.topic.WorkdaySystemGetCommonExecution
       output:
         binding:
           errorResponse: Topic.cancelErrorResponse

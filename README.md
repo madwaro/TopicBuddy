@@ -4,11 +4,19 @@ Copilot Studio topic definitions and Adaptive Card samples for Workday Employee 
 
 ## Getting started
 
-1. Clone this repo
-2. Open in VS Code — Copilot will automatically pick up conventions from `.github/copilot-instructions.md`
-3. Create a branch for your scenario: `git checkout -b scenario/<your-scenario-name>`
-4. Add your scenario folder under `EmployeeScenarios/`
-5. Open a PR when ready for review
+1. Install the recommended VS Code extensions (see below)
+2. Clone this repo
+3. Open in VS Code — Copilot will automatically pick up conventions from `.github/copilot-instructions.md`
+4. Create a branch for your scenario: `git checkout -b scenario/<your-scenario-name>`
+5. Add your scenario folder under `EmployeeScenarios/`
+6. Open a PR when ready for review
+
+## Recommended VS Code extensions
+
+| Extension | Purpose |
+|---|---|
+| [Adaptive Card Previewer](https://marketplace.visualstudio.com/items?itemName=TeamsDevApp.vscode-adaptive-cards) | Preview card JSON files directly in VS Code. Iterate on card visuals without needing Copilot Studio. |
+| [YAML](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml) | Syntax highlighting and validation for `topic.yaml` files. |
 
 ## Folder structure
 

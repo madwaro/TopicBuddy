@@ -8,8 +8,10 @@ This repo contains Copilot Studio topic definitions and Adaptive Card samples fo
 - The main file is always `topic.yaml` using `kind: AdaptiveDialog`.
 - Reuse the shared execution wrapper for all Workday API calls:
   ```yaml
-  dialog: msdyn_copilotforemployeeselfservicehr.topic.WorkdaySystemGetCommonExecution
+  dialog: msdyn_copilotforemployeeselfservice.topic.WorkdaySystemGetCommonExecution
   ```
+  The correct solution prefix is `msdyn_copilotforemployeeselfservice` (no `hr` suffix). Using `msdyn_copilotforemployeeselfservicehr` will cause "Selected topic is no longer available" redirect errors in the topic checker.
+- The `WorkdaySystemGetCommonExecution` dialog accepts two inputs (`parameters`: String, `scenarioName`: String) and returns three outputs (`errorResponse`: String, `isSuccess`: Boolean, `workdayResponse`: String). Always bind using these exact names and types.
 - Follow the scenario naming pattern for `scenarioName` values:
   `msdyn_HRWorkday<Domain><Action>` — e.g. `msdyn_HRWorkdayAbsenceCancelTimeOff`.
 - Always identify the employee via `Global.ESS_UserContext_Employee_Id`.

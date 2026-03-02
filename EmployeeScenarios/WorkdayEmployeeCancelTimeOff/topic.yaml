@@ -1,0 +1,428 @@
+kind: AdaptiveDialog
+inputs:
+  - kind: AutomaticTaskInput
+    propertyName: InputStartDate
+    description: The start date of a time off request the user wants to cancel.
+    entity: DateTimePrebuiltEntity
+    shouldPromptUser: false
+
+  - kind: AutomaticTaskInput
+    propertyName: InputTimeOffType
+    description: Extract the type of leave the user wants to cancel, such as vacation, sick leave, floating holiday, PTO, annual leave.
+    entity: StringPrebuiltEntity
+    shouldPromptUser: false
+
+modelDescription: |-
+  You will respond only to requests related to cancelling a time off request for the user making the request.
+  This topic fetches the user's upcoming time off requests from Workday and allows them to select one to cancel.
+  Only the requesting user's own time off can be cancelled. Do not cancel time off for other employees.
+
+  Example invalid requests:
+  "Cancel time off for my manager"
+  "Cancel my colleague's vacation"
+  "Cancel [EmployeeName]'s time off"
+
+  Example valid requests:
+  "Cancel my time off request"
+  "I need to cancel my vacation"
+  "Retract my sick leave request"
+  "Cancel my PTO for next week"
+
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent: {}
+  actions:
+    - kind: SetVariable
+      id: set_workday_url
+      variable: Topic.WorkdayUrl
+      value: https://impl.workday.com/<TENANT_NAME>/home.htmld
+
+    # ================================================================
+    # Fetch the employee's upcoming time off requests from Workday.
+    # The scenario calls the Workday Get_Time_Off_Requests API and
+    # returns only requests with a future start date.
+    # ================================================================
+    - kind: BeginDialog
+      id: get_time_off_requests
+      displayName: Get Upcoming Time Off Requests
+      input:
+        binding:
+          parameters: ="{""params"":[{""key"":""{Employee_ID}"",""value"":""" & Global.ESS_UserContext_Employee_Id & """}]}"
+          scenarioName: msdyn_HRWorkdayAbsenceGetTimeOffRequests
+
+      dialog: msdyn_copilotforemployeeselfservicehr.topic.WorkdaySystemGetCommonExecution
+      output:
+        binding:
+          errorResponse: Topic.fetchErrorResponse
+          isSuccess: Topic.fetchIsSuccess
+          workdayResponse: Topic.fetchResponse
+
+    # Handle fetch failure before attempting to parse
+    - kind: ConditionGroup
+      id: check_fetch_success
+      conditions:
+        - id: fetch_failed
+          condition: =Topic.fetchIsSuccess = false
+          actions:
+            - kind: SendActivity
+              id: fetch_error_msg
+              activity: "I wasn't able to retrieve your time off requests right now. Please try again later or visit [Workday]({Topic.WorkdayUrl}) directly."
+
+            - kind: CancelAllDialogs
+              id: cancel_on_fetch_error
+
+    - kind: ParseValue
+      id: parse_requests
+      variable: Topic.parsedRequests
+      valueType:
+        kind: Record
+        properties:
+          RequestID:
+            type:
+              kind: Table
+              properties:
+                Value: String
+
+          TimeOffType:
+            type:
+              kind: Table
+              properties:
+                Value: String
+
+          StartDate:
+            type:
+              kind: Table
+              properties:
+                Value: String
+
+          EndDate:
+            type:
+              kind: Table
+              properties:
+                Value: String
+
+          Status:
+            type:
+              kind: Table
+              properties:
+                Value: String
+
+      value: =Topic.fetchResponse
+
+    # Build a flat table enriched with human-readable labels for display
+    - kind: SetVariable
+      id: build_requests_table
+      variable: Topic.RequestsTable
+      value: |-
+        =ForAll(
+          Sequence(CountRows(Topic.parsedRequests.RequestID)),
+          {
+            RequestID: Index(Topic.parsedRequests.RequestID, Value).Value,
+            TimeOffType: Index(Topic.parsedRequests.TimeOffType, Value).Value,
+            StartDate: Index(Topic.parsedRequests.StartDate, Value).Value,
+            EndDate: Index(Topic.parsedRequests.EndDate, Value).Value,
+            Status: Index(Topic.parsedRequests.Status, Value).Value,
+            TypeLabel: Switch(
+              Index(Topic.parsedRequests.TimeOffType, Value).Value,
+              "Vacation_Hours", "Vacation",
+              "Floating_Holiday_Hours", "Floating holiday",
+              "Sick_Hours", "Sick leave",
+              Index(Topic.parsedRequests.TimeOffType, Value).Value
+            ),
+            Label: Switch(
+              Index(Topic.parsedRequests.TimeOffType, Value).Value,
+              "Vacation_Hours", "Vacation",
+              "Floating_Holiday_Hours", "Floating holiday",
+              "Sick_Hours", "Sick leave",
+              Index(Topic.parsedRequests.TimeOffType, Value).Value
+            ) & " – " &
+            Text(DateValue(Index(Topic.parsedRequests.StartDate, Value).Value), "mmm d, yyyy") &
+            If(
+              Index(Topic.parsedRequests.StartDate, Value).Value <> Index(Topic.parsedRequests.EndDate, Value).Value,
+              " to " & Text(DateValue(Index(Topic.parsedRequests.EndDate, Value).Value), "mmm d, yyyy"),
+              ""
+            ) & " (" & Index(Topic.parsedRequests.Status, Value).Value & ")"
+          }
+        )
+
+    # If no upcoming requests exist, inform the user and exit gracefully
+    - kind: ConditionGroup
+      id: check_has_requests
+      conditions:
+        - id: no_requests
+          condition: =CountRows(Topic.RequestsTable) = 0
+          actions:
+            - kind: SendActivity
+              id: no_requests_msg
+              activity: "You don't have any upcoming time off requests to cancel. Is there anything else I can help you with?"
+
+            - kind: CancelAllDialogs
+              id: cancel_on_no_requests
+
+    - kind: SendActivity
+      id: intro_message
+      activity: "Sure, I'll help you cancel a time off request. Here's a list of your upcoming requests."
+
+    # ================================================================
+    # STEP 1: Show the list of upcoming requests and ask user to pick one
+    # ================================================================
+    - kind: AdaptiveCardPrompt
+      id: select_request_to_cancel
+      displayName: Select time off request to cancel
+      card: |-
+        ={
+          type: "AdaptiveCard",
+          '$schema': "http://adaptivecards.io/schemas/adaptive-card.json",
+          version: "1.5",
+          body: [
+            {
+              type: "TextBlock",
+              text: "Cancel a time off request",
+              weight: "Bolder",
+              size: "Large",
+              wrap: true
+            },
+            {
+              type: "TextBlock",
+              text: "Select the request you'd like to cancel.",
+              wrap: true,
+              spacing: "Small"
+            },
+            {
+              type: "Input.ChoiceSet",
+              id: "selectedRequestID",
+              label: "Time off request",
+              style: "compact",
+              isRequired: true,
+              errorMessage: "Please select a request.",
+              choices: ForAll(
+                Topic.RequestsTable,
+                {
+                  title: Label,
+                  value: RequestID
+                }
+              )
+            },
+            {
+              type: "ActionSet",
+              spacing: "Medium",
+              actions: [
+                { type: "Action.Submit", title: "Next", id: "Next" },
+                { type: "Action.Submit", title: "Cancel", id: "Cancel" }
+              ]
+            }
+          ],
+          actions: []
+        }
+      output:
+        binding:
+          actionSubmitId: Topic.actionSubmitId
+          selectedRequestID: Topic.selectedRequestID
+
+      outputType:
+        properties:
+          actionSubmitId: String
+          selectedRequestID: String
+
+    - kind: ConditionGroup
+      id: handle_cancel_selection
+      conditions:
+        - id: cancel_selection
+          condition: =Topic.actionSubmitId = "Cancel"
+          actions:
+            - kind: SendActivity
+              id: cancel_selection_msg
+              activity: No problem! Your requests remain unchanged. Is there anything else I can help you with?
+
+            - kind: CancelAllDialogs
+              id: cancel_on_selection
+
+    # Look up full details of the selected request for the confirmation card
+    - kind: SetVariable
+      id: set_selected_request
+      variable: Topic.SelectedRequest
+      value: =LookUp(Topic.RequestsTable, RequestID = Topic.selectedRequestID)
+
+    # ================================================================
+    # STEP 2: Confirm before cancelling
+    # ================================================================
+    - kind: AdaptiveCardPrompt
+      id: confirm_cancellation
+      displayName: Confirm cancellation
+      card: |-
+        ={
+          type: "AdaptiveCard",
+          '$schema': "http://adaptivecards.io/schemas/adaptive-card.json",
+          version: "1.5",
+          body: [
+            {
+              type: "TextBlock",
+              text: "Confirm cancellation",
+              weight: "Bolder",
+              size: "Large", This action cannot be undone.",
+              wrap: true,
+              spacing: "Small"
+            },
+            {
+              type: "FactSet",
+              spacing: "Medium",
+              facts: [
+                { title: "Type", value: Topic.SelectedRequest.TypeLabel },
+                { title: "Start date", value: Text(DateValue(Topic.SelectedRequest.StartDate), "mmmm d, yyyy") },
+                { title: "End date", value: Text(DateValue(Topic.SelectedRequest.EndDate), "mmmm d, yyyy") },
+                { title: "Status", value: Topic.SelectedRequest.Status }
+              ]
+            },
+            {
+              type: "ActionSet",
+              spacing: "Medium",
+              actions: [
+                { type: "Action.Submit", title: "Yes, cancel request", id: "Confirm" },
+                { type: "Action.Submit", title: "No, keep it", id: "Keep" }
+              ]
+            }
+          ],
+          actions: []
+        }
+      output:
+        binding:
+          actionSubmitId: Topic.confirmActionId
+
+      outputType:
+        properties:
+          actionSubmitId: String
+
+    - kind: ConditionGroup
+      id: handle_keep
+      conditions:
+        - id: keep_request
+          condition: =Topic.confirmActionId = "Keep"
+          actions:
+            - kind: SendActivity
+              id: keep_msg
+              activity: Got it! Your time off request has been kept. Is there anything else I can help you with?
+
+            - kind: CancelAllDialogs
+              id: cancel_on_keep
+
+    # ================================================================
+    # STEP 3: Submit the cancellation to Workday
+    # ================================================================
+    - kind: BeginDialog
+      id: cancel_time_off
+      displayName: Cancel Time Off Request
+      input:
+        binding:
+          parameters: ="{""params"":[{""key"":""{Employee_ID}"",""value"":""" & Global.ESS_UserContext_Employee_Id & """},{""key"":""{Time_Off_Request_ID}"",""value"":""" & Topic.selectedRequestID & """}]}"
+          scenarioName: msdyn_HRWorkdayAbsenceCancelTimeOff
+
+      dialog: msdyn_copilotforemployeeselfservicehr.topic.WorkdaySystemGetCommonExecution
+      output:
+        binding:
+          errorResponse: Topic.cancelErrorResponse
+          isSuccess: Topic.cancelIsSuccess
+          workdayResponse: Topic.cancelResponse
+
+    - kind: SetVariable
+      id: parse_cancel_error
+      variable: Topic.friendlyCancelError
+      value: =IfError(Text(ParseJSON(Topic.cancelErrorResponse).error.message), IfError(Text(ParseJSON(Topic.cancelErrorResponse).message), Topic.cancelErrorResponse))
+
+    - kind: ConditionGroup
+      id: report_cancel_result
+      conditions:
+        - id: cancel_failed
+          condition: =Topic.cancelIsSuccess = false
+          actions:
+            # Use AI to humanize the Workday error message
+            - kind: AnswerQuestionWithAI
+              id: generate_cancel_error
+              autoSend: false
+              variable: Topic.aiCancelError
+              userInput: =Topic.friendlyCancelError
+              additionalInstructions: Reframe the following Workday error message in a friendly way for an employee. Keep it to ONE short sentence describing what went wrong. Do NOT include suggestions or next steps. Do NOT apologize. Do NOT use technical jargon. Example output format - "This request can't be cancelled because it's already been processed."
+
+            - kind: SetVariable
+              id: set_final_cancel_error
+              variable: Topic.finalCancelError
+              value: =If(IsBlank(Topic.aiCancelError), "Something went wrong and your request couldn't be cancelled.", Topic.aiCancelError)
+
+            - kind: SendActivity
+              id: cancel_error_msg
+              activity: "{Topic.finalCancelError}"
+
+            - kind: Question
+              id: ask_retry_cancel
+              interruptionPolicy:
+                allowInterruption: false
+              variable: Topic.retryCancelChoice
+              prompt: Would you like to try cancelling a different request?
+              entity: BooleanPrebuiltEntity
+
+            - kind: ConditionGroup
+              id: handle_retry_cancel
+              conditions:
+                - id: retry_cancel
+                  condition: =Topic.retryCancelChoice = true
+                  actions:
+                    - kind: GotoAction
+                      id: goto_select_on_retry
+                      actionId: select_request_to_cancel
+              elseActions:
+                - kind: SendActivity
+                  id: end_on_no_cancel_retry
+                  activity: No problem! Let me know if you need anything else.
+
+                - kind: CancelAllDialogs
+                  id: cancel_on_no_cancel_retry
+
+      elseActions:
+        - kind: SendActivity
+          id: cancel_success_card
+          activity:
+            attachments:
+              - kind: AdaptiveCardTemplate
+                cardContent: |-
+                  ={
+                    type: "AdaptiveCard",
+                    '$schema': "http://adaptivecards.io/schemas/adaptive-card.json",
+                    version: "1.5",
+                    body: [
+                      {
+                        type: "TextBlock",
+                        text: "✅ Request cancelled",
+                        weight: "Bolder",
+                        size: "Large",
+                        wrap: true,
+                        spacing: "Small"
+                      },
+                      {
+                        type: "FactSet",
+                        spacing: "Medium",
+                        facts: [
+                          { title: "Type", value: Topic.SelectedRequest.TypeLabel },
+                          { title: "Date range", value: Text(DateValue(Topic.SelectedRequest.StartDate), "mmmm d, yyyy") & " to " & Text(DateValue(Topic.SelectedRequest.EndDate), "mmmm d, yyyy") }
+                        ]
+                      },
+                    ],
+                    actions: []
+                  }
+
+        - kind: SendActivity
+          id: follow_up_msg
+          activity: Can I help you with anything else?
+
+        - kind: CancelAllDialogs
+          id: end_dialogs
+
+inputType:
+  properties:
+    InputStartDate:
+      displayName: InputStartDate
+      description: The start date of a time off request the user wants to cancel.
+      type: DateTime
+    InputTimeOffType:
+      displayName: InputTimeOffType
+      description: The type of leave the user wants to cancel.
+      type: String

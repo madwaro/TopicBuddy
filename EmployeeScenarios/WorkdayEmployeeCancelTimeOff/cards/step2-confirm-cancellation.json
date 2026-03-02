@@ -1,0 +1,40 @@
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.5",
+  "$comment": "Sample data: Topic.SelectedRequest = { TypeLabel: 'Vacation', StartDate: '2026-03-10', EndDate: '2026-03-14', Status: 'Pending Approval' }",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "Confirm cancellation",
+      "weight": "Bolder",
+      "size": "Large",
+      "wrap": true
+    },
+    {
+      "type": "TextBlock",
+      "text": "Are you sure you want to cancel the following request? This action cannot be undone.",
+      "wrap": true,
+      "spacing": "Small"
+    },
+    {
+      "type": "FactSet",
+      "spacing": "Medium",
+      "facts": [
+        { "title": "Type", "value": "Vacation" },
+        { "title": "Start date", "value": "March 10, 2026" },
+        { "title": "End date", "value": "March 14, 2026" },
+        { "title": "Status", "value": "Pending approval" }
+      ]
+    },
+    {
+      "type": "ActionSet",
+      "spacing": "Medium",
+      "actions": [
+        { "type": "Action.Submit", "title": "Yes, cancel request", "id": "Confirm" },
+        { "type": "Action.Submit", "title": "No, keep it", "id": "Keep" }
+      ]
+    }
+  ],
+  "actions": []
+}

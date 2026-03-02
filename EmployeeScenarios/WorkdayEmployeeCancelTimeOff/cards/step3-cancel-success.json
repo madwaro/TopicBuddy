@@ -1,0 +1,24 @@
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.5",
+  "$comment": "Sample data: Topic.SelectedRequest = { TypeLabel: 'Vacation', StartDate: '2026-03-10', EndDate: '2026-03-14' }",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "✅ Request cancelled",
+      "weight": "Bolder",
+      "size": "Large",
+      "wrap": true
+    },
+    {
+      "type": "FactSet",
+      "spacing": "Medium",
+      "facts": [
+        { "title": "Type", "value": "Vacation" },
+        { "title": "Date range", "value": "March 10, 2026 to March 14, 2026" }
+      ]
+    }
+  ],
+  "actions": []
+}

@@ -1,0 +1,52 @@
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.5",
+  "$comment": "Sample data: Topic.RequestsTable populated with 3 example requests.",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "Cancel a time off request",
+      "weight": "Bolder",
+      "size": "Large",
+      "wrap": true
+    },
+    {
+      "type": "TextBlock",
+      "text": "Select the request you'd like to cancel.",
+      "wrap": true,
+      "spacing": "Small"
+    },
+    {
+      "type": "Input.ChoiceSet",
+      "id": "selectedRequestID",
+      "label": "Time off request",
+      "style": "compact",
+      "isRequired": true,
+      "errorMessage": "Please select a request.",
+      "choices": [
+        {
+          "title": "Vacation – Mar 10, 2026 to Mar 14, 2026 (Pending Approval)",
+          "value": "TOR-001"
+        },
+        {
+          "title": "Sick leave – Mar 20, 2026 (Approved)",
+          "value": "TOR-002"
+        },
+        {
+          "title": "Floating holiday – Apr 1, 2026 (Pending Approval)",
+          "value": "TOR-003"
+        }
+      ]
+    },
+    {
+      "type": "ActionSet",
+      "spacing": "Medium",
+      "actions": [
+        { "type": "Action.Submit", "title": "Next", "id": "Next" },
+        { "type": "Action.Submit", "title": "Cancel", "id": "Cancel" }
+      ]
+    }
+  ],
+  "actions": []
+}

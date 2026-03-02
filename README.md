@@ -1,4 +1,4 @@
-# Workday Copilot Studio scenarios
+# Topic Buddy
 
 Copilot Studio topic definitions and Adaptive Card samples for Workday Employee Self-Service scenarios.
 

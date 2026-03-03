@@ -6,7 +6,7 @@
   "body": [
     {
       "type": "TextBlock",
-      "text": "✅ Request cancelled",
+      "text": "Request cancelled ✅",
       "weight": "Bolder",
       "size": "Large",
       "wrap": true

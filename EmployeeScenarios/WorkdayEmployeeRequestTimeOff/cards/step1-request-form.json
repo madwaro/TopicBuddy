@@ -19,8 +19,6 @@
         {
           "type": "TextBlock",
           "text": "Available balance in hours as of March 3, 2026",
-          "size": "Small",
-          "weight": "Bolder",
           "wrap": true
         },
         {
@@ -30,24 +28,24 @@
               "type": "Column",
               "width": "stretch",
               "items": [
-                { "type": "TextBlock", "text": "Vacation", "size": "Small", "wrap": true },
-                { "type": "TextBlock", "text": "80", "weight": "Bolder", "spacing": "Small" }
+                { "type": "TextBlock", "text": "Vacation", "size": "Small", "wrap": true, "isSubtle": true },
+                { "type": "TextBlock", "text": "80", "weight": "Bolder", "spacing": "ExtraSmall" }
               ]
             },
             {
               "type": "Column",
               "width": "stretch",
               "items": [
-                { "type": "TextBlock", "text": "Sick leave", "size": "Small", "wrap": true },
-                { "type": "TextBlock", "text": "40", "weight": "Bolder", "spacing": "Small" }
+                { "type": "TextBlock", "text": "Sick leave", "size": "Small", "wrap": true, "isSubtle": true },
+                { "type": "TextBlock", "text": "40", "weight": "Bolder", "spacing": "ExtraSmall" }
               ]
             },
             {
               "type": "Column",
               "width": "stretch",
               "items": [
-                { "type": "TextBlock", "text": "Floating holiday", "size": "Small", "wrap": true },
-                { "type": "TextBlock", "text": "8", "weight": "Bolder", "spacing": "Small" }
+                { "type": "TextBlock", "text": "Floating holiday", "size": "Small", "wrap": true, "isSubtle": true },
+                { "type": "TextBlock", "text": "8", "weight": "Bolder", "spacing": "ExtraSmall" }
               ]
             }
           ]

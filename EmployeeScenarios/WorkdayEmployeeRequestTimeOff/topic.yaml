@@ -250,8 +250,6 @@ beginDialog:
                         {
                           type: "TextBlock",
                           text: "Available balance in hours as of " & Text(Topic.AsOfEffectiveDate, "mmmm d, yyyy"),
-                          size: "Small",
-                          weight: "Bolder",
                           wrap: true
                         },
                         {
@@ -262,8 +260,8 @@ beginDialog:
                               type: "Column",
                               width: "stretch",
                               items: [
-                                { type: "TextBlock", text: DisplayName, size: "Small", wrap: true },
-                                { type: "TextBlock", text: Balance, weight: "Bolder", spacing: "Small" }
+                                { type: "TextBlock", text: DisplayName, size: "Small", wrap: true, isSubtle: true },
+                                { type: "TextBlock", text: Balance, weight: "Bolder", spacing: "ExtraSmall" }
                               ]
                             }
                           )

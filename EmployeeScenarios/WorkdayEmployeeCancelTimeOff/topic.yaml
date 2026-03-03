@@ -274,11 +274,12 @@ beginDialog:
             },
             {
               type: "TextBlock",
-              text: "This action cannot be undone.",
+              text: "Are you sure you want to cancel the following request? This action cannot be undone.",
               wrap: true
             },
             {
               type: "FactSet",
+              spacing: "Large",
               facts: [
                 { title: "Type", value: Topic.SelectedRequest.TypeLabel },
                 { title: "Start date", value: Text(DateValue(Topic.SelectedRequest.StartDate), "mmmm d, yyyy") },

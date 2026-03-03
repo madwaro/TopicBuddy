@@ -18,6 +18,7 @@
     },
     {
       "type": "FactSet",
+      "spacing": "Large",
       "facts": [
         { "title": "Type", "value": "Vacation" },
         { "title": "Start date", "value": "March 10, 2026" },

@@ -213,16 +213,11 @@ beginDialog:
                 }
               )
             },
-            {
-              type: "ActionSet",
-              spacing: "Medium",
-              actions: [
-                { type: "Action.Submit", title: "Next", id: "Next" },
-                { type: "Action.Submit", title: "Cancel", id: "Cancel" }
-              ]
-            }
           ],
-          actions: []
+          actions: [
+            { type: "Action.Submit", title: "Next", id: "Next" },
+            { type: "Action.Submit", title: "Cancel", id: "Cancel" }
+          ]
         }
       output:
         binding:
@@ -287,16 +282,11 @@ beginDialog:
                 { title: "Status", value: Topic.SelectedRequest.Status }
               ]
             },
-            {
-              type: "ActionSet",
-              spacing: "Medium",
-              actions: [
-                { type: "Action.Submit", title: "Yes, cancel request", id: "Confirm" },
-                { type: "Action.Submit", title: "No, keep it", id: "Keep" }
-              ]
-            }
           ],
-          actions: []
+          actions: [
+            { type: "Action.Submit", title: "Yes, cancel request", id: "Confirm" },
+            { type: "Action.Submit", title: "No, keep it", id: "Keep" }
+          ]
         }
       output:
         binding:

@@ -30,6 +30,7 @@ This repo contains Copilot Studio topic definitions and Adaptive Card samples fo
 - Do not include the Workday icon or "Workday" branding inside cards.
 - Cards extracted as standalone test files go in a `cards/` subfolder and are prefixed with their step number: `step1-`, `step2-`, `step3-`, etc.
 - Standalone card files use static sample data in place of Power Fx expressions so they can be tested directly in the [Adaptive Card Designer](https://adaptivecards.io/designer/).
+- **Never use `ActionSet` in the card `body`.** Always place submit/cancel actions in the card's top-level `actions` array. This applies to all cards in all scenarios.
 
 ## Trigger phrases
 

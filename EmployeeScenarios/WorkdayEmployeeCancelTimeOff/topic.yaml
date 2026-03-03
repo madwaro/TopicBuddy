@@ -275,12 +275,10 @@ beginDialog:
             {
               type: "TextBlock",
               text: "This action cannot be undone.",
-              wrap: true,
-              spacing: "Large"
+              wrap: true
             },
             {
               type: "FactSet",
-              spacing: "Medium",
               facts: [
                 { title: "Type", value: Topic.SelectedRequest.TypeLabel },
                 { title: "Start date", value: Text(DateValue(Topic.SelectedRequest.StartDate), "mmmm d, yyyy") },

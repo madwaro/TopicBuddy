@@ -14,12 +14,10 @@
     {
       "type": "TextBlock",
       "text": "Are you sure you want to cancel the following request? This action cannot be undone.",
-      "wrap": true,
-      "spacing": "Large"
+      "wrap": true
     },
     {
       "type": "FactSet",
-      "spacing": "Medium",
       "facts": [
         { "title": "Type", "value": "Vacation" },
         { "title": "Start date", "value": "March 10, 2026" },

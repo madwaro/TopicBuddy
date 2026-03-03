@@ -560,7 +560,7 @@ beginDialog:
                     body: [
                       {
                         type: "TextBlock",
-                        text: "✅ Request submitted",
+                        text: "Request submitted ✅",
                         weight: "Bolder",
                         size: "Large",
                         wrap: true

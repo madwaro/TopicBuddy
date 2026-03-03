@@ -14,7 +14,8 @@
     {
       "type": "TextBlock",
       "text": "Are you sure you want to cancel the following request? This action cannot be undone.",
-      "wrap": true
+      "wrap": true,
+      "spacing": "Large"
     },
     {
       "type": "FactSet",

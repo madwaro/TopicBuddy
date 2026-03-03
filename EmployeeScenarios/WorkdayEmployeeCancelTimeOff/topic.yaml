@@ -275,7 +275,8 @@ beginDialog:
             {
               type: "TextBlock",
               text: "This action cannot be undone.",
-              wrap: true
+              wrap: true,
+              spacing: "Large"
             },
             {
               type: "FactSet",

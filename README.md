@@ -8,7 +8,7 @@ Copilot Studio topic definitions and Adaptive Card samples for Workday Employee 
 2. Clone this repo
 3. Open in VS Code — Copilot will automatically pick up conventions from `.github/copilot-instructions.md`
 4. Create a branch for your scenario: `git checkout -b scenario/<your-scenario-name>`
-5. Add your scenario folder under `EmployeeScenarios/`
+5. Add your scenario folder under `src/Workday/EmployeeScenarios/` or `src/Workday/ManagerScenarios/`
 6. Open a PR when ready for review
 
 ## Recommended VS Code extensions
@@ -21,13 +21,19 @@ Copilot Studio topic definitions and Adaptive Card samples for Workday Employee 
 ## Folder structure
 
 ```
-EmployeeScenarios/
-└── WorkdayEmployee<ScenarioName>/
-    ├── topic.yaml          # Copilot Studio AdaptiveDialog topic
-    └── cards/
-        ├── step1-<name>.json   # Standalone Adaptive Card for testing
-        ├── step2-<name>.json
-        └── step3-<name>.json
+src/
+└── Workday/
+    ├── EmployeeScenarios/
+    │   └── WorkdayEmployee<ScenarioName>/
+    │       ├── topic.yaml          # Copilot Studio AdaptiveDialog topic
+    │       └── cards/
+    │           ├── step1-<name>.json   # Standalone Adaptive Card for testing
+    │           ├── step2-<name>.json
+    │           └── step3-<name>.json
+    └── ManagerScenarios/
+        └── WorkdayManager<ScenarioName>/
+            ├── topic.yaml
+            └── cards/
 ```
 
 ## Testing cards
@@ -66,7 +72,7 @@ Use the built-in **Test** panel with trigger phrases from the scenario's `README
 
 See [`.github/copilot-instructions.md`](.github/copilot-instructions.md) for the full set of authoring conventions. Key points:
 
-- Scenario folders: `WorkdayEmployee<ScenarioName>`
+- Scenario folders: `src/Workday/{EmployeeScenarios|ManagerScenarios}/WorkdayEmployee<ScenarioName>`
 - `scenarioName` values: `msdyn_HRWorkday<Domain><Action>`
 - All card text in **sentence case**
 - Headings: `Large` + `Bolder` — body text: default size — secondary text: `Small`

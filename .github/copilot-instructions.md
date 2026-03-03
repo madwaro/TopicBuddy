@@ -4,7 +4,7 @@ This repo contains Copilot Studio topic definitions and Adaptive Card samples fo
 
 ## Topic YAML conventions
 
-- Each scenario lives in its own folder under `EmployeeScenarios/`, e.g. `WorkdayEmployeeCancelTimeOff/`.
+- Each scenario lives in its own folder under `src/Workday/EmployeeScenarios/` or `src/Workday/ManagerScenarios/`, e.g. `src/Workday/EmployeeScenarios/WorkdayEmployeeCancelTimeOff/`.
 - The main file is always `topic.yaml` using `kind: AdaptiveDialog`.
 - Reuse the shared execution wrapper for all Workday API calls:
   ```yaml

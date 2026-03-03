@@ -1,0 +1,112 @@
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.5",
+  "$comment": "Sample data: balances for Vacation (80h), Sick leave (40h), Floating holiday (8h). No dates pre-filled.",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "Book your time off",
+      "weight": "Bolder",
+      "size": "Large",
+      "wrap": true
+    },
+    {
+      "type": "Container",
+      "style": "emphasis",
+      "bleed": true,
+      "items": [
+        {
+          "type": "TextBlock",
+          "text": "Available balance in hours as of March 3, 2026",
+          "size": "Small",
+          "weight": "Bolder",
+          "wrap": true
+        },
+        {
+          "type": "ColumnSet",
+          "columns": [
+            {
+              "type": "Column",
+              "width": "stretch",
+              "items": [
+                { "type": "TextBlock", "text": "Vacation", "size": "Small", "wrap": true },
+                { "type": "TextBlock", "text": "80", "weight": "Bolder", "spacing": "Small" }
+              ]
+            },
+            {
+              "type": "Column",
+              "width": "stretch",
+              "items": [
+                { "type": "TextBlock", "text": "Sick leave", "size": "Small", "wrap": true },
+                { "type": "TextBlock", "text": "40", "weight": "Bolder", "spacing": "Small" }
+              ]
+            },
+            {
+              "type": "Column",
+              "width": "stretch",
+              "items": [
+                { "type": "TextBlock", "text": "Floating holiday", "size": "Small", "wrap": true },
+                { "type": "TextBlock", "text": "8", "weight": "Bolder", "spacing": "Small" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "TextBlock",
+      "text": "Fields marked with * are required.",
+      "wrap": true,
+      "spacing": "Medium",
+      "size": "Small"
+    },
+    {
+      "type": "Input.ChoiceSet",
+      "id": "timeOffType",
+      "label": "Type of time off *",
+      "style": "compact",
+      "isRequired": true,
+      "errorMessage": "Please select a type.",
+      "choices": [
+        { "title": "Vacation", "value": "Vacation_Hours" },
+        { "title": "Floating holiday", "value": "Floating_Holiday_Hours" },
+        { "title": "Sick leave", "value": "Sick_Hours" },
+        { "title": "I don't see my leave type listed", "value": "NOT_LISTED" }
+      ]
+    },
+    {
+      "type": "Input.Date",
+      "id": "startDate",
+      "label": "Start date *",
+      "isRequired": true,
+      "errorMessage": "Please select a start date."
+    },
+    {
+      "type": "Input.Date",
+      "id": "endDate",
+      "label": "End date *",
+      "isRequired": true,
+      "errorMessage": "Please select an end date."
+    },
+    {
+      "type": "Input.Number",
+      "id": "hoursPerDay",
+      "label": "Hours per day *",
+      "min": 1,
+      "max": 24,
+      "value": 8,
+      "isRequired": true,
+      "errorMessage": "Please enter hours per day."
+    },
+    {
+      "type": "ActionSet",
+      "spacing": "Medium",
+      "actions": [
+        { "type": "Action.Submit", "title": "Submit", "id": "Submit" },
+        { "type": "Action.Submit", "title": "Cancel", "id": "Cancel" }
+      ]
+    }
+  ],
+  "actions": []
+}

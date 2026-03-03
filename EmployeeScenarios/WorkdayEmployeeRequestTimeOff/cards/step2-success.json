@@ -1,0 +1,30 @@
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.5",
+  "$comment": "Sample data: Vacation, March 10–14 2026, 5 days, 8h/day.",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "✅ Request submitted",
+      "weight": "Bolder",
+      "size": "Large",
+      "wrap": true
+    },
+    {
+      "type": "TextBlock",
+      "text": "Your time off request has been successfully submitted and is now pending approval.",
+      "wrap": true
+    },
+    {
+      "type": "FactSet",
+      "spacing": "Large",
+      "facts": [
+        { "title": "Type", "value": "Vacation" },
+        { "title": "Date range", "value": "March 10, 2026 to March 14, 2026 (5 days)" },
+        { "title": "Total hours", "value": "40 hours (5 x 8-hour days)" }
+      ]
+    }
+  ],
+  "actions": []
+}

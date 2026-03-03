@@ -1,0 +1,51 @@
+<workdayEntityConfigurationTemplate>
+    <scenario name="EmployeeGetVacationBalance">
+        <apiRequests>
+            <apiRequest>
+                <authType>User</authType>
+                <endpoint>
+                    <request>msdyn_HRWorkdayHCMEmployeeGetVacationBalance</request>
+                    <serviceName>Human_Resources</serviceName>
+                    <version>v42.0</version>
+                </endpoint>
+                <requestParameters/>
+                <responseProperties>
+                    <!-- NOTE: Validate these XPath expressions against a live Workday Get_Workers response -->
+                    <property>
+                        <extractPath>//*[local-name()='Leave_Balance_Data']/*[local-name()='Leave_Type_Data']/*[local-name()='Leave_Type_Name']</extractPath>
+                        <key>PlanDescriptor</key>
+                    </property>
+                    <property>
+                        <extractPath>//*[local-name()='Leave_Balance_Data']/*[local-name()='Leave_Type_Data']/*[local-name()='Leave_Type_ID']</extractPath>
+                        <key>PlanID</key>
+                    </property>
+                    <property>
+                        <extractPath>//*[local-name()='Leave_Balance_Data']/*[local-name()='Balance']</extractPath>
+                        <key>RemainingBalance</key>
+                    </property>
+                    <property>
+                        <extractPath>//*[local-name()='Leave_Balance_Data']/*[local-name()='Unit_of_Time']</extractPath>
+                        <key>UnitOfTime</key>
+                    </property>
+                </responseProperties>
+            </apiRequest>
+        </apiRequests>
+    </scenario>
+    <requestTemplates>
+        <requestTemplate name="msdyn_HRWorkdayHCMEmployeeGetVacationBalance">
+            <wd:Get_Workers_Request xmlns:wd="urn:com.workday/bsvc" wd:version="v42.0">
+                <wd:Request_References>
+                    <wd:Worker_Reference>
+                        <wd:ID wd:type="Employee_ID">{Employee_ID}</wd:ID>
+                    </wd:Worker_Reference>
+                </wd:Request_References>
+                <wd:Response_Filter>
+                    <wd:As_Of_Effective_Date>{As_Of_Effective_Date}</wd:As_Of_Effective_Date>
+                </wd:Response_Filter>
+                <wd:Response_Group>
+                    <wd:Include_Leave_Balance>true</wd:Include_Leave_Balance>
+                </wd:Response_Group>
+            </wd:Get_Workers_Request>
+        </requestTemplate>
+    </requestTemplates>
+</workdayEntityConfigurationTemplate>

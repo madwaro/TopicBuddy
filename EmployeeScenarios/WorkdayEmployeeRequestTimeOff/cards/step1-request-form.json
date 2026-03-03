@@ -99,15 +99,10 @@
       "value": 8,
       "isRequired": true,
       "errorMessage": "Please enter hours per day."
-    },
-    {
-      "type": "ActionSet",
-      "spacing": "Medium",
-      "actions": [
-        { "type": "Action.Submit", "title": "Submit", "id": "Submit" },
-        { "type": "Action.Submit", "title": "Cancel", "id": "Cancel" }
-      ]
     }
   ],
-  "actions": []
+  "actions": [
+    { "type": "Action.Submit", "title": "Submit", "id": "Submit" },
+    { "type": "Action.Submit", "title": "Cancel", "id": "Cancel" }
+  ]
 }

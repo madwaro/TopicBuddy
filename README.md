@@ -34,6 +34,10 @@ EmployeeScenarios/
 
 Paste any file from `cards/` into the [Adaptive Card Designer](https://adaptivecards.io/designer/) to preview it. Card files use static sample data in place of Power Fx expressions.
 
+### Faster iteration with the Adaptive Card Previewer extension
+
+For UI polishing, the [Adaptive Card Previewer](https://marketplace.visualstudio.com/items?itemName=TeamsDevApp.vscode-adaptive-cards) VS Code extension is the most efficient workflow. Open any `cards/*.json` file and use **Ctrl+Shift+P → Adaptive Card: Preview** (or click the preview icon in the editor toolbar) to get a live side-by-side preview that updates as you edit the JSON. This means you can iterate on layout, spacing, labels, and styling entirely within VS Code — no need to open Copilot Studio, paste YAML, or publish a topic just to see a visual change.
+
 ## Deploying and testing a topic in Copilot Studio
 
 ### 1. Upload XML templates

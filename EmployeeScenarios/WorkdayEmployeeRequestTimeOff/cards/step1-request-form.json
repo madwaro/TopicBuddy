@@ -66,6 +66,7 @@
       "label": "Type of time off",
       "style": "compact",
       "isRequired": true,
+      "placeholder": "Select a type",
       "errorMessage": "Please select a type.",
       "choices": [
         { "title": "Vacation", "value": "Vacation_Hours" },
@@ -79,6 +80,7 @@
       "id": "startDate",
       "label": "Start date",
       "isRequired": true,
+      "placeholder": "Select a date",
       "errorMessage": "Please select a start date."
     },
     {
@@ -86,6 +88,7 @@
       "id": "endDate",
       "label": "End date",
       "isRequired": true,
+      "placeholder": "Select a date",
       "errorMessage": "Please select an end date."
     },
     {
@@ -96,6 +99,7 @@
       "max": 24,
       "value": 8,
       "isRequired": true,
+      "placeholder": "Enter hours per day",
       "errorMessage": "Please enter hours per day."
     }
   ],

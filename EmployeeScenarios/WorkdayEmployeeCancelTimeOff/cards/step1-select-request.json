@@ -12,15 +12,9 @@
       "wrap": true
     },
     {
-      "type": "TextBlock",
-      "text": "Select the request you'd like to cancel.",
-      "wrap": true,
-      "spacing": "Small"
-    },
-    {
       "type": "Input.ChoiceSet",
       "id": "selectedRequestID",
-      "label": "Time off request",
+      "label": "Select the request you'd like to cancel",
       "style": "compact",
       "isRequired": true,
       "errorMessage": "Please select a request.",

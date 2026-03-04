@@ -84,6 +84,7 @@ beginDialog:
       value: =false
 
     - kind: BeginDialog
+      id: get_time_off_requests
       displayName: Get Upcoming Time Off Requests
       input:
         binding:

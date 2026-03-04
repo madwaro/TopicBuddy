@@ -306,6 +306,7 @@ The ESS template XML contains ONLY the body element. The shared `WorkdaySystemGe
 ### YAML & modelDescription
 
 - `modelDescription` max 1024 characters. Use abbreviations (e.g., "Emp ID" not "Employee ID")
+- **Every action node MUST have an `id` property** — this includes `SetVariable`, `BeginDialog`, `SendActivity`, `AdaptiveCardPrompt`, `ConditionGroup`, `Question`, `ParseValue`, `GotoAction`, `CancelAllDialogs`, and all other action kinds
 - `modelDescription` uses `=` assignments, explicit formatting verbs, ends with `"Double check if rules are followed, fix if not"`
 - WRITE topics: `modelDescription` describes the operation context. READ topics: concise field listings
 - No `displayName` on ConditionGroup `conditions:` items — only `id` and `condition` allowed

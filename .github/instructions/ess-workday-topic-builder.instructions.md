@@ -231,36 +231,9 @@ PersonNamePrebuiltEntity  BooleanPrebuiltEntity  EmailPrebuiltEntity
 
 ---
 
-## Adaptive Card Rules (topic.yaml inline cards)
+## Adaptive Card Rules
 
-These rules apply to Adaptive Cards defined inline within `topic.yaml`. See the separate `adaptive-cards.instructions.md` for rules specific to standalone card JSON files.
-
-### Body Array — Prevent Power Fx Union Type Pollution
-
-When the card `body[]` array contains mixed element types, Power Fx infers a union record type and serializes ALL properties from ALL types on EVERY element (with `null` for unused ones), causing `adaptiveCardInvalid` errors.
-
-**FIX:** The body array should contain ONLY: `TextBlock`, `Container`, and `ColumnSet`. Wrap other inputs:
-- `Input.ChoiceSet` → wrap in `ColumnSet > Column > items: [...]`
-- `Input.Date`, `Input.Number`, `Input.Text` → wrap in `Container > items: [...]`
-
-### Column Rules
-
-- **Every Column MUST have `items`** — even spacer Columns: `items: []`
-- **Always add `verticalContentAlignment: "Center"`** to every Column
-- Width-stretch spacer Columns: `{ type: "Column", width: "stretch", items: [], verticalContentAlignment: "Center" }`
-
-### TextBlock Rules
-
-- **`text` must NEVER be null**. Use `If(IsBlank(value), "—", value)` as fallback for any dynamic text.
-
-### Input Rules
-
-- **`isRequired: true` inputs MUST have a `label`** property
-- **`errorMessage`** should be provided for all required inputs
-
-### No Empty Branding Blocks
-
-Every Adaptive Card element must display meaningful content. Do not include empty Workday icon blocks with blank text.
+All Adaptive Card conventions (body array structure, Column rules, TextBlock/Input rules, branding, styling) are defined in `adaptive-cards.instructions.md`. That file applies to both standalone card JSON files and inline cards in `topic.yaml`.
 
 ---
 
@@ -340,11 +313,7 @@ The ESS template XML contains ONLY the body element. The shared `WorkdaySystemGe
 
 ### Adaptive Cards (inline in topic.yaml)
 
-- Every Column has `items` (even `items: []` for spacers) + `verticalContentAlignment: "Center"`
-- Body array contains ONLY TextBlock, Container, ColumnSet — inputs wrapped in Container or ColumnSet>Column
-- TextBlock `text` never null — use `If(IsBlank(value), "—", value)`
-- Inputs with `isRequired: true` have a `label`
-- No empty branding blocks
+- All rules from `adaptive-cards.instructions.md` apply (body array structure, Column items, TextBlock null fallbacks, Input labels, no branding blocks)
 
 ### Power Fx & Messages
 

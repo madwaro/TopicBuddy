@@ -36,7 +36,7 @@
     </scenario>
     <requestTemplates>
         <requestTemplate name="msdyn_HRWorkdayAbsenceGetTimeOffRequests">
-            <wd:Get_Time_Off_Requests_Request xmlns:wd="urn:com.workday/bsvc" wd:version="v42.0">
+            <wd:Get_Time_Off_Request xmlns:wd="urn:com.workday/bsvc" wd:version="v42.0">
                 <wd:Request_Criteria>
                     <wd:Worker_Reference>
                         <wd:ID wd:type="Employee_ID">{Employee_ID}</wd:ID>
@@ -49,7 +49,7 @@
                 <wd:Response_Group>
                     <wd:Include_Time_Off_Entries>true</wd:Include_Time_Off_Entries>
                 </wd:Response_Group>
-            </wd:Get_Time_Off_Requests_Request>
+            </wd:Get_Time_Off_Request>
         </requestTemplate>
     </requestTemplates>
 </workdayEntityConfigurationTemplate>

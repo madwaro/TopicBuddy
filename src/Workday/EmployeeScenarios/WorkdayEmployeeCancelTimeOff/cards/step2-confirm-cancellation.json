@@ -30,7 +30,7 @@
           ]
         }
       ]
-    },
+    }
   ],
   "actions": [
     { "type": "Action.Submit", "title": "Yes, cancel request", "id": "Confirm" },

@@ -12,24 +12,29 @@
       "wrap": true
     },
     {
-      "type": "Input.ChoiceSet",
-      "id": "selectedRequestID",
-      "label": "Select the request you'd like to cancel",
-      "style": "compact",
-      "isRequired": true,
-      "errorMessage": "Please select a request.",
-      "choices": [
+      "type": "Container",
+      "items": [
         {
-          "title": "Vacation – Mar 10, 2026 to Mar 14, 2026 (Pending Approval)",
-          "value": "TOR-001"
-        },
-        {
-          "title": "Sick leave – Mar 20, 2026 (Approved)",
-          "value": "TOR-002"
-        },
-        {
-          "title": "Floating holiday – Apr 1, 2026 (Pending Approval)",
-          "value": "TOR-003"
+          "type": "Input.ChoiceSet",
+          "id": "selectedRequestID",
+          "label": "Select the request you'd like to cancel",
+          "style": "compact",
+          "isRequired": true,
+          "errorMessage": "Please select a request.",
+          "choices": [
+            {
+              "title": "Vacation – Mar 10, 2026 to Mar 14, 2026 (Pending Approval)",
+              "value": "TOR-001"
+            },
+            {
+              "title": "Sick leave – Mar 20, 2026 (Approved)",
+              "value": "TOR-002"
+            },
+            {
+              "title": "Floating holiday – Apr 1, 2026 (Pending Approval)",
+              "value": "TOR-003"
+            }
+          ]
         }
       ]
     },

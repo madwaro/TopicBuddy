@@ -10,7 +10,6 @@
                 </endpoint>
                 <requestParameters/>
                 <responseProperties>
-                    <!-- NOTE: Validate these XPath expressions against a live Workday Get_Workers response -->
                     <property>
                         <extractPath>//*[local-name()='Leave_Balance_Data']/*[local-name()='Leave_Type_Data']/*[local-name()='Leave_Type_Name']</extractPath>
                         <key>PlanDescriptor</key>

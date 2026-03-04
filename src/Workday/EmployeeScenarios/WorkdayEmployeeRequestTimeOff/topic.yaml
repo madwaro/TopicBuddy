@@ -47,11 +47,23 @@ modelDescription: |-
   "Please request vacation from January 5th to January 10th"
   "Request sick leave for next week"
   "I need time off from 2025-09-15 to 2025-09-20 for a family event"
+  Double check if rules are followed, fix if not.
 
 beginDialog:
   kind: OnRecognizedIntent
   id: main
-  intent: {}
+  intent:
+    triggerQueries:
+      - "Request time off"
+      - "I need to submit time off"
+      - "I want to take some time off"
+      - "Book time off for me"
+      - "Please request vacation from January 5th to January 10th"
+      - "Request sick leave for next week"
+      - "I need time off from September 15 to September 20"
+      - "Submit a floating holiday request"
+      - "I'd like to take PTO"
+      - "Can I request annual leave"
   actions:
     - kind: SetVariable
       id: set_workday_url
@@ -220,8 +232,42 @@ beginDialog:
       id: intro_message
       activity: "{Topic.introMessage}"
 
+    - kind: SetVariable
+      id: init_action_submit_id
+      variable: Topic.actionSubmitId
+      value: =""
+
+    - kind: SetVariable
+      id: init_time_off_type
+      variable: Topic.timeOffType
+      value: =""
+
+    - kind: SetVariable
+      id: init_start_date
+      variable: Topic.startDate
+      value: =""
+
+    - kind: SetVariable
+      id: init_end_date
+      variable: Topic.endDate
+      value: =""
+
+    - kind: SetVariable
+      id: init_hours_per_day
+      variable: Topic.hoursPerDay
+      value: =""
+
+    - kind: SetVariable
+      id: init_retry_date_choice
+      variable: Topic.retryDateChoice
+      value: =false
+
+    - kind: SetVariable
+      id: init_retry_choice
+      variable: Topic.retryChoice
+      value: =false
+
     - kind: ConditionGroup
-      id: need_inputs
       conditions:
         - id: always_true
           condition: true
@@ -259,9 +305,10 @@ beginDialog:
                             {
                               type: "Column",
                               width: "stretch",
+                              verticalContentAlignment: "Center",
                               items: [
-                                { type: "TextBlock", text: DisplayName, size: "Small", wrap: true, isSubtle: true },
-                                { type: "TextBlock", text: Balance, weight: "Bolder", spacing: "ExtraSmall" }
+                                { type: "TextBlock", text: If(IsBlank(DisplayName), "—", DisplayName), size: "Small", wrap: true, isSubtle: true },
+                                { type: "TextBlock", text: If(IsBlank(Balance), "—", Balance), weight: "Bolder", spacing: "ExtraSmall" }
                               ]
                             }
                           )
@@ -277,49 +324,69 @@ beginDialog:
                       isSubtle: true
                     },
                     {
-                      type: "Input.ChoiceSet",
-                      id: "timeOffType",
-                      label: "Type of time off",
-                      style: "compact",
-                      value: Topic.MappedTimeOffType,
-                      isRequired: true,
-                      placeholder: "Select a type",
-                      errorMessage: "Please select a type.",
-                      choices: [
-                        { title: "Vacation", value: "Vacation_Hours" },
-                        { title: "Floating holiday", value: "Floating_Holiday_Hours" },
-                        { title: "Sick leave", value: "Sick_Hours" },
-                        { title: "I don't see my leave type listed", value: "NOT_LISTED" }
+                      type: "Container",
+                      items: [
+                        {
+                          type: "Input.ChoiceSet",
+                          id: "timeOffType",
+                          label: "Type of time off",
+                          style: "compact",
+                          value: Topic.MappedTimeOffType,
+                          isRequired: true,
+                          placeholder: "Select a type",
+                          errorMessage: "Please select a type.",
+                          choices: [
+                            { title: "Vacation", value: "Vacation_Hours" },
+                            { title: "Floating holiday", value: "Floating_Holiday_Hours" },
+                            { title: "Sick leave", value: "Sick_Hours" },
+                            { title: "I don't see my leave type listed", value: "NOT_LISTED" }
+                          ]
+                        }
                       ]
                     },
                     {
-                      type: "Input.Date",
-                      id: "startDate",
-                      label: "Start date",
-                      value: If(IsBlank(Topic.InputStartDate), "", Text(Topic.InputStartDate, "yyyy-MM-dd")),
-                      isRequired: true,
-                      placeholder: "Select a date",
-                      errorMessage: "Please select a start date."
+                      type: "Container",
+                      items: [
+                        {
+                          type: "Input.Date",
+                          id: "startDate",
+                          label: "Start date",
+                          value: If(IsBlank(Topic.InputStartDate), "", Text(Topic.InputStartDate, "yyyy-MM-dd")),
+                          isRequired: true,
+                          placeholder: "Select a date",
+                          errorMessage: "Please select a start date."
+                        }
+                      ]
                     },
                     {
-                      type: "Input.Date",
-                      id: "endDate",
-                      label: "End date",
-                      value: If(IsBlank(Topic.InputEndDate), "", Text(Topic.InputEndDate, "yyyy-MM-dd")),
-                      isRequired: true,
-                      placeholder: "Select a date",
-                      errorMessage: "Please select an end date."
+                      type: "Container",
+                      items: [
+                        {
+                          type: "Input.Date",
+                          id: "endDate",
+                          label: "End date",
+                          value: If(IsBlank(Topic.InputEndDate), "", Text(Topic.InputEndDate, "yyyy-MM-dd")),
+                          isRequired: true,
+                          placeholder: "Select a date",
+                          errorMessage: "Please select an end date."
+                        }
+                      ]
                     },
                     {
-                      type: "Input.Number",
-                      id: "hoursPerDay",
-                      label: "Hours per day",
-                      min: 1,
-                      max: 24,
-                      value: If(IsBlank(Topic.InputHoursPerDay), 8, Value(Topic.InputHoursPerDay)),
-                      isRequired: true,
-                      placeholder: "Enter hours per day",
-                      errorMessage: "Please enter hours per day."
+                      type: "Container",
+                      items: [
+                        {
+                          type: "Input.Number",
+                          id: "hoursPerDay",
+                          label: "Hours per day",
+                          min: 1,
+                          max: 24,
+                          value: If(IsBlank(Topic.InputHoursPerDay), 8, Value(Topic.InputHoursPerDay)),
+                          isRequired: true,
+                          placeholder: "Enter hours per day",
+                          errorMessage: "Please enter hours per day."
+                        }
+                      ]
                     }
                   ],
                   actions: [
@@ -382,16 +449,12 @@ beginDialog:
         - id: end_before_start
           condition: =DateValue(Topic.endDate) < DateValue(Topic.startDate)
           actions:
-            - kind: SendActivity
-              id: date_error_msg
-              activity: The end date can't be earlier than the start date.
-
             - kind: Question
               id: ask_retry_dates
               interruptionPolicy:
                 allowInterruption: false
               variable: Topic.retryDateChoice
-              prompt: Would you like to try with different dates?
+              prompt: The end date can't be earlier than the start date. Would you like to try with different dates?
               entity: BooleanPrebuiltEntity
 
             - kind: ConditionGroup
@@ -517,16 +580,12 @@ beginDialog:
               variable: Topic.finalErrorMessage
               value: =If(IsBlank(Topic.aiGeneratedError), "The dates you selected aren't available.", Topic.aiGeneratedError)
 
-            - kind: SendActivity
-              id: friendly_error_message
-              activity: "{Topic.finalErrorMessage}"
-
             - kind: Question
               id: ask_retry
               interruptionPolicy:
                 allowInterruption: false
               variable: Topic.retryChoice
-              prompt: Would you like to try with different dates?
+              prompt: "{Topic.finalErrorMessage} Would you like to try with different dates?"
               entity: BooleanPrebuiltEntity
 
             - kind: ConditionGroup
@@ -571,21 +630,28 @@ beginDialog:
                         wrap: true
                       },
                       {
-                        type: "FactSet",
-                        spacing: "Large",
-                        facts: [
-                          { title: "Type", value: Switch(Topic.timeOffType, "Vacation_Hours", "Vacation", "Floating_Holiday_Hours", "Floating holiday", "Sick_Hours", "Sick leave", Topic.timeOffType) },
-                          { title: "Date range", value: Text(DateValue(Topic.startDate), "mmmm d, yyyy") & " to " & Text(DateValue(Topic.endDate), "mmmm d, yyyy") & " (" & Text(Topic.totalDays) & " days)" },
-                          { title: "Total hours", value: Text(Topic.totalDays * Value(Topic.hoursPerDay)) & " hours (" & Text(Topic.totalDays) & " x " & Topic.hoursPerDay & "-hour days)" }
+                        type: "Container",
+                        items: [
+                          {
+                            type: "FactSet",
+                            spacing: "Large",
+                            facts: [
+                              { title: "Type", value: Switch(Topic.timeOffType, "Vacation_Hours", "Vacation", "Floating_Holiday_Hours", "Floating holiday", "Sick_Hours", "Sick leave", Topic.timeOffType) },
+                              { title: "Date range", value: Text(DateValue(Topic.startDate), "mmmm d, yyyy") & " to " & Text(DateValue(Topic.endDate), "mmmm d, yyyy") & " (" & Text(Topic.totalDays) & " days)" },
+                              { title: "Total hours", value: Text(Topic.totalDays * Value(Topic.hoursPerDay)) & " hours (" & Text(Topic.totalDays) & " x " & Topic.hoursPerDay & "-hour days)" }
+                            ]
+                          }
                         ]
+                      },
+                      {
+                        type: "TextBlock",
+                        text: "Can I help you submit another request?",
+                        wrap: true,
+                        spacing: "Large"
                       }
                     ],
                     actions: []
                   }
-
-        - kind: SendActivity
-          id: follow_up_msg
-          activity: Can I help you submit another request?
 
         - kind: CancelAllDialogs
           id: end_dialogs

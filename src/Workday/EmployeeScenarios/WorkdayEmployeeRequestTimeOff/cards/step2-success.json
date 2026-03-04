@@ -17,12 +17,17 @@
       "wrap": true
     },
     {
-      "type": "FactSet",
-      "spacing": "Large",
-      "facts": [
-        { "title": "Type", "value": "Vacation" },
-        { "title": "Date range", "value": "March 10, 2026 to March 14, 2026 (5 days)" },
-        { "title": "Total hours", "value": "40 hours (5 x 8-hour days)" }
+      "type": "Container",
+      "items": [
+        {
+          "type": "FactSet",
+          "spacing": "Large",
+          "facts": [
+            { "title": "Type", "value": "Vacation" },
+            { "title": "Date range", "value": "March 10, 2026 to March 14, 2026 (5 days)" },
+            { "title": "Total hours", "value": "40 hours (5 x 8-hour days)" }
+          ]
+        }
       ]
     }
   ],

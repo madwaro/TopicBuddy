@@ -27,11 +27,21 @@ modelDescription: |-
   "I need to cancel my vacation"
   "Retract my sick leave request"
   "Cancel my PTO for next week"
+  Double check if rules are followed, fix if not.
 
 beginDialog:
   kind: OnRecognizedIntent
   id: main
-  intent: {}
+  intent:
+    triggerQueries:
+      - "Cancel my time off request"
+      - "I need to cancel my vacation"
+      - "Retract my sick leave request"
+      - "Cancel my PTO for next week"
+      - "Cancel my time off"
+      - "I want to cancel a time off request"
+      - "Withdraw my leave request"
+      - "Can I cancel my upcoming time off"
   actions:
     - kind: SetVariable
       id: set_workday_url
@@ -58,8 +68,22 @@ beginDialog:
       variable: Topic.fetchErrorResponse
       value: =""
 
+    - kind: SetVariable
+      id: init_action_submit_id
+      variable: Topic.actionSubmitId
+      value: =""
+
+    - kind: SetVariable
+      id: init_confirm_action_id
+      variable: Topic.confirmActionId
+      value: =""
+
+    - kind: SetVariable
+      id: init_retry_cancel_choice
+      variable: Topic.retryCancelChoice
+      value: =false
+
     - kind: BeginDialog
-      id: get_time_off_requests
       displayName: Get Upcoming Time Off Requests
       input:
         binding:
@@ -175,13 +199,6 @@ beginDialog:
             - kind: CancelAllDialogs
               id: cancel_on_no_requests
 
-    - kind: SendActivity
-      id: intro_message
-      activity: "Sure, I'll help you cancel a time off request. Here's a list of your upcoming requests."
-
-    # ================================================================
-    # STEP 1: Show the list of upcoming requests and ask user to pick one
-    # ================================================================
     - kind: AdaptiveCardPrompt
       id: select_request_to_cancel
       displayName: Select time off request to cancel
@@ -199,19 +216,29 @@ beginDialog:
               wrap: true
             },
             {
-              type: "Input.ChoiceSet",
-              id: "selectedRequestID",
-              label: "Select the request you'd like to cancel",
-              style: "compact",
-              isRequired: true,
-              errorMessage: "Please select a request.",
-              choices: ForAll(
-                Topic.RequestsTable,
+              type: "TextBlock",
+              text: "Here's a list of your upcoming requests. Select the one you'd like to cancel.",
+              wrap: true
+            },
+            {
+              type: "Container",
+              items: [
                 {
-                  title: Label,
-                  value: RequestID
+                  type: "Input.ChoiceSet",
+                  id: "selectedRequestID",
+                  label: "Select the request you'd like to cancel",
+                  style: "compact",
+                  isRequired: true,
+                  errorMessage: "Please select a request.",
+                  choices: ForAll(
+                    Topic.RequestsTable,
+                    {
+                      title: Label,
+                      value: RequestID
+                    }
+                  )
                 }
-              )
+              ]
             },
           ],
           actions: [
@@ -273,13 +300,18 @@ beginDialog:
               wrap: true
             },
             {
-              type: "FactSet",
-              spacing: "Large",
-              facts: [
-                { title: "Type", value: Topic.SelectedRequest.TypeLabel },
-                { title: "Start date", value: Text(DateValue(Topic.SelectedRequest.StartDate), "mmmm d, yyyy") },
-                { title: "End date", value: Text(DateValue(Topic.SelectedRequest.EndDate), "mmmm d, yyyy") },
-                { title: "Status", value: Topic.SelectedRequest.Status }
+              type: "Container",
+              items: [
+                {
+                  type: "FactSet",
+                  spacing: "Large",
+                  facts: [
+                    { title: "Type", value: Topic.SelectedRequest.TypeLabel },
+                    { title: "Start date", value: Text(DateValue(Topic.SelectedRequest.StartDate), "mmmm d, yyyy") },
+                    { title: "End date", value: Text(DateValue(Topic.SelectedRequest.EndDate), "mmmm d, yyyy") },
+                    { title: "Status", value: Topic.SelectedRequest.Status }
+                  ]
+                }
               ]
             },
           ],
@@ -416,20 +448,27 @@ beginDialog:
                         spacing: "Small"
                       },
                       {
-                        type: "FactSet",
-                        spacing: "Medium",
-                        facts: [
-                          { title: "Type", value: Topic.SelectedRequest.TypeLabel },
-                          { title: "Date range", value: Text(DateValue(Topic.SelectedRequest.StartDate), "mmmm d, yyyy") & " to " & Text(DateValue(Topic.SelectedRequest.EndDate), "mmmm d, yyyy") }
+                        type: "Container",
+                        items: [
+                          {
+                            type: "FactSet",
+                            spacing: "Medium",
+                            facts: [
+                              { title: "Type", value: Topic.SelectedRequest.TypeLabel },
+                              { title: "Date range", value: Text(DateValue(Topic.SelectedRequest.StartDate), "mmmm d, yyyy") & " to " & Text(DateValue(Topic.SelectedRequest.EndDate), "mmmm d, yyyy") }
+                            ]
+                          }
                         ]
                       },
+                      {
+                        type: "TextBlock",
+                        text: "Can I help you with anything else?",
+                        wrap: true,
+                        spacing: "Large"
+                      }
                     ],
                     actions: []
                   }
-
-        - kind: SendActivity
-          id: follow_up_msg
-          activity: Can I help you with anything else?
 
         - kind: CancelAllDialogs
           id: end_dialogs

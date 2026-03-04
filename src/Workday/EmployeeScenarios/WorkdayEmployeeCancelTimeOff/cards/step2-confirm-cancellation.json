@@ -17,13 +17,18 @@
       "wrap": true
     },
     {
-      "type": "FactSet",
-      "spacing": "Large",
-      "facts": [
-        { "title": "Type", "value": "Vacation" },
-        { "title": "Start date", "value": "March 10, 2026" },
-        { "title": "End date", "value": "March 14, 2026" },
-        { "title": "Status", "value": "Pending approval" }
+      "type": "Container",
+      "items": [
+        {
+          "type": "FactSet",
+          "spacing": "Large",
+          "facts": [
+            { "title": "Type", "value": "Vacation" },
+            { "title": "Start date", "value": "March 10, 2026" },
+            { "title": "End date", "value": "March 14, 2026" },
+            { "title": "Status", "value": "Pending approval" }
+          ]
+        }
       ]
     },
   ],

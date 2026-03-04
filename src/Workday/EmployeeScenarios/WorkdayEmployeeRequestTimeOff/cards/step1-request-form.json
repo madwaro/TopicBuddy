@@ -27,6 +27,7 @@
             {
               "type": "Column",
               "width": "stretch",
+              "verticalContentAlignment": "Center",
               "items": [
                 { "type": "TextBlock", "text": "Vacation", "size": "Small", "wrap": true, "isSubtle": true },
                 { "type": "TextBlock", "text": "80", "weight": "Bolder", "spacing": "ExtraSmall" }
@@ -35,6 +36,7 @@
             {
               "type": "Column",
               "width": "stretch",
+              "verticalContentAlignment": "Center",
               "items": [
                 { "type": "TextBlock", "text": "Sick leave", "size": "Small", "wrap": true, "isSubtle": true },
                 { "type": "TextBlock", "text": "40", "weight": "Bolder", "spacing": "ExtraSmall" }
@@ -43,6 +45,7 @@
             {
               "type": "Column",
               "width": "stretch",
+              "verticalContentAlignment": "Center",
               "items": [
                 { "type": "TextBlock", "text": "Floating holiday", "size": "Small", "wrap": true, "isSubtle": true },
                 { "type": "TextBlock", "text": "8", "weight": "Bolder", "spacing": "ExtraSmall" }
@@ -61,46 +64,66 @@
       "isSubtle": true
     },
     {
-      "type": "Input.ChoiceSet",
-      "id": "timeOffType",
-      "label": "Type of time off",
-      "style": "compact",
-      "isRequired": true,
-      "placeholder": "Select a type",
-      "errorMessage": "Please select a type.",
-      "choices": [
-        { "title": "Vacation", "value": "Vacation_Hours" },
-        { "title": "Floating holiday", "value": "Floating_Holiday_Hours" },
-        { "title": "Sick leave", "value": "Sick_Hours" },
-        { "title": "I don't see my leave type listed", "value": "NOT_LISTED" }
+      "type": "Container",
+      "items": [
+        {
+          "type": "Input.ChoiceSet",
+          "id": "timeOffType",
+          "label": "Type of time off",
+          "style": "compact",
+          "isRequired": true,
+          "placeholder": "Select a type",
+          "errorMessage": "Please select a type.",
+          "choices": [
+            { "title": "Vacation", "value": "Vacation_Hours" },
+            { "title": "Floating holiday", "value": "Floating_Holiday_Hours" },
+            { "title": "Sick leave", "value": "Sick_Hours" },
+            { "title": "I don't see my leave type listed", "value": "NOT_LISTED" }
+          ]
+        }
       ]
     },
     {
-      "type": "Input.Date",
-      "id": "startDate",
-      "label": "Start date",
-      "isRequired": true,
-      "placeholder": "Select a date",
-      "errorMessage": "Please select a start date."
+      "type": "Container",
+      "items": [
+        {
+          "type": "Input.Date",
+          "id": "startDate",
+          "label": "Start date",
+          "isRequired": true,
+          "placeholder": "Select a date",
+          "errorMessage": "Please select a start date."
+        }
+      ]
     },
     {
-      "type": "Input.Date",
-      "id": "endDate",
-      "label": "End date",
-      "isRequired": true,
-      "placeholder": "Select a date",
-      "errorMessage": "Please select an end date."
+      "type": "Container",
+      "items": [
+        {
+          "type": "Input.Date",
+          "id": "endDate",
+          "label": "End date",
+          "isRequired": true,
+          "placeholder": "Select a date",
+          "errorMessage": "Please select an end date."
+        }
+      ]
     },
     {
-      "type": "Input.Number",
-      "id": "hoursPerDay",
-      "label": "Hours per day",
-      "min": 1,
-      "max": 24,
-      "value": 8,
-      "isRequired": true,
-      "placeholder": "Enter hours per day",
-      "errorMessage": "Please enter hours per day."
+      "type": "Container",
+      "items": [
+        {
+          "type": "Input.Number",
+          "id": "hoursPerDay",
+          "label": "Hours per day",
+          "min": 1,
+          "max": 24,
+          "value": 8,
+          "isRequired": true,
+          "placeholder": "Enter hours per day",
+          "errorMessage": "Please enter hours per day."
+        }
+      ]
     }
   ],
   "actions": [

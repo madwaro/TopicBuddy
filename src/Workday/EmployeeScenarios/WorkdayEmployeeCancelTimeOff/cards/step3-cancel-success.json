@@ -12,11 +12,16 @@
       "wrap": true
     },
     {
-      "type": "FactSet",
-      "spacing": "Medium",
-      "facts": [
-        { "title": "Type", "value": "Vacation" },
-        { "title": "Date range", "value": "March 10, 2026 to March 14, 2026" }
+      "type": "Container",
+      "items": [
+        {
+          "type": "FactSet",
+          "spacing": "Medium",
+          "facts": [
+            { "title": "Type", "value": "Vacation" },
+            { "title": "Date range", "value": "March 10, 2026 to March 14, 2026" }
+          ]
+        }
       ]
     }
   ],

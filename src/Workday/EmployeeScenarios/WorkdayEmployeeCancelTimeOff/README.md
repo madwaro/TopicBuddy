@@ -83,4 +83,21 @@ Environment makers need to configure the following in the topic:
 ## Dependencies
 
 - **Employee context**: `Global.ESS_UserContext_Employee_Id` must be set by the Employee Self-Service agent before this topic is invoked
-- **Shared execution topic**: `msdyn_copilotforemployeeselfservicehr.topic.WorkdaySystemGetCommonExecution` must be available in the agent
+- **Shared execution topic**: `msdyn_copilotforemployeeselfservice.topic.WorkdaySystemGetCommonExecution` must be available in the agent
+
+## Required Workday Permissions
+
+The Integration System User (ISU) used by the Power Platform Workday SOAP connector must have:
+
+| Permission | Domain Security Policy | Access |
+|------------|----------------------|--------|
+| **Get_Time_Off_Requests** | Time Off domain | **Get** |
+| **Cancel_Time_Off_Request** | Time Off domain | **Put** |
+
+### How to Grant Permissions
+
+1. In Workday, search "Integration System Security"
+2. Find the ISU associated with the Power Platform connector
+3. Add the security group(s) / domain security policies listed above
+4. Search "Activate All Pending Security Policy Changes" and activate
+5. Test the topic — "task submitted is not authorized" error should resolve
